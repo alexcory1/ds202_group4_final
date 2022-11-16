@@ -24,11 +24,22 @@ show(df)
 ```{r}
 library(tidyverse)
 library(lubridate)
+library(dplyr)
 ```
+
+```{r}
+
+
+df1 <- df %>% dplyr::mutate(year = year(as.Date(df$ReportDate,format="%m/%d/%Y")),
+                 month = lubridate::month(as.Date(df$ReportDate,format="%m/%d/%Y")),
+                 day = lubridate::day(as.Date(df$ReportDate,format="%m/%d/%Y")))
+```
+
 
 You can also embed plots, for example:
 ```{r}
-ggplot(data=df, aes(x=df$ReportDate, y=df$TotalCases)) +
+ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases)) +
+  facet_grid(. ~df1$year)+
   geom_line()+
   geom_point()
 ```
