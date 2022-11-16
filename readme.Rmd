@@ -14,17 +14,24 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
+
 library(data.table)
 df <- fread('~/DS202Labs/ds202_group4_final/MD_COVID-19_-_MASTER_Case_Tracker.csv')
 show(df)
 ```
 
 ## Including Plots
+```{r}
+library(tidyverse)
+library(lubridate)
+```
 
 You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+ggplot(data=df, aes(x=df$ReportDate, y=df$TotalCases)) +
+  geom_line()+
+  geom_point()
 ```
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
