@@ -43,6 +43,12 @@ ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases)) +
   geom_line()+
   geom_point()
 ```
+```{r}
+ggplot(data=df1, aes(x=df1$month, y=df$PosTestPercent)) +
+  facet_grid(. ~df1$year)+
+  geom_line()+
+  geom_point()
+```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
