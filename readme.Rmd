@@ -51,12 +51,14 @@ ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color=CaseDelta)) +
 ```
 
 ```{r}
-ggplot(data=df1, aes(x=df1$month, y=df$PosTestPercent)) +
-  facet_grid(. ~df1$year)+
+ggplot(data=df1, aes(x=df1$date, y=df$PosTestPercent)) +
   geom_line()+
   xlab("Month") +
   ylab("Percentage of Positive Tests") +
-  geom_point()
+  geom_point() +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "2 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
 ```{r}
