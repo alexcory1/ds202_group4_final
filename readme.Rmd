@@ -16,7 +16,7 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r}
 
 library(data.table)
-df <- fread('~/DS202Labs/ds202_group4_final/MD_COVID-19_-_MASTER_Case_Tracker.csv')
+df <- fread('~/ds202_group4_final/MD_COVID-19_-_MASTER_Case_Tracker.csv')
 show(df)
 ```
 
