@@ -38,10 +38,11 @@ df1 <- df %>% dplyr::mutate(year = year(as.Date(df$ReportDate,format="%m/%d/%Y")
 
 You can also embed plots, for example:
 ```{r}
-ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases)) +
+ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases, color=CaseDelta)) +
   facet_grid(. ~df1$year)+
   xlab("Month") +
   ylab("Total Cases") +
+  scale_colour_gradientn(colors=rainbow(4)) +
   geom_line()+
   geom_point()
 ```
