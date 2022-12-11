@@ -40,6 +40,8 @@ You can also embed plots, for example:
 ```{r}
 ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases)) +
   facet_grid(. ~df1$year)+
+  xlab("Month") +
+  ylab("Total Cases") +
   geom_line()+
   geom_point()
 ```
@@ -47,21 +49,26 @@ ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases)) +
 ggplot(data=df1, aes(x=df1$month, y=df$PosTestPercent)) +
   facet_grid(. ~df1$year)+
   geom_line()+
+  xlab("Month") +
+  ylab("Percentage of Positive Tests") +
   geom_point()
 ```
 
 ```{r}
 ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
+  xlab("Total Hospitalized") +
+  ylab("Hospital Beds Available") +
   geom_point()
 ```
 ```{r}
 proportion = df1$total_released / df1$total_hospitalized
 ggplot(data=df1, aes(x=df$ReportDate, y=proportion)) +
   facet_grid(. ~df1$year)+
+  xlab("Report Date") +
+  ylab("Proportion") +
   geom_point()
 
 ```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
