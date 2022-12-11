@@ -69,11 +69,11 @@ ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
 
 
 ```{r}
-proportion = df1$total_released / df1$total_hospitalized
-ggplot(data=df1, aes(x=df1$date, y=proportion, color=CaseDelta)) +
+proportion_released = df1$total_released / df1$total_hospitalized
+ggplot(data=df1, aes(x=df1$date, y=proportion_released, color=CaseDelta)) +
   scale_colour_gradientn(colors=rainbow(4)) +
   xlab("Month Reported") +
-  ylab("Proportion") +
+  ylab("Proportion Released") +
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
