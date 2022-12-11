@@ -85,8 +85,8 @@ This graph shows the correlation between new cases and new deaths. Only 43% of t
 
 ```{r}
 df1[is.na(df1)] = 0
-ggplot(data=df1, aes(y=df1$deathsDelta, x=df1$CaseDelta)) +
-  labs(x = "New Cases", y = "New Deaths") +
+ggplot(data=df1, aes(x=df1$deathsDelta, y=df1$CaseDelta)) +
+  labs(y = "New Cases", x = "New Deaths") +
   geom_point() +
   geom_abline(color = "red")
 ```
