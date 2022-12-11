@@ -16,7 +16,7 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r}
 
 library(data.table)
-df <- fread('~/ds202_group4_final/MD_COVID-19_-_MASTER_Case_Tracker.csv')
+df <- fread('MD_COVID-19_-_MASTER_Case_Tracker.csv')
 show(df)
 ```
 
@@ -32,7 +32,8 @@ library(dplyr)
 
 df1 <- df %>% dplyr::mutate(year = year(as.Date(df$ReportDate,format="%m/%d/%Y")),
                  month = lubridate::month(as.Date(df$ReportDate,format="%m/%d/%Y")),
-                 day = lubridate::day(as.Date(df$ReportDate,format="%m/%d/%Y")))
+                 day = lubridate::day(as.Date(df$ReportDate,format="%m/%d/%Y")),
+                 date = my(format(as.Date(df$ReportDate,format = "%m/%d/%Y"),"%m/%y")))
 ```
 
 
@@ -46,8 +47,6 @@ ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases, color=CaseDelta)) +
   geom_line()+
   geom_point()
 ```
-
-
 
 ```{r}
 ggplot(data=df1, aes(x=df1$month, y=df$PosTestPercent)) +
@@ -76,6 +75,7 @@ ggplot(data=df1, aes(x=df1$month, y=proportion, color=CaseDelta)) +
   geom_point()
 
 ```
+
 ```{r}
 
 df1[is.na(df1)] = 0
