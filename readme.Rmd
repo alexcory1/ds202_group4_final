@@ -46,6 +46,9 @@ ggplot(data=df1, aes(x=df1$month, y=df1$TotalCases, color=CaseDelta)) +
   geom_line()+
   geom_point()
 ```
+
+
+
 ```{r}
 ggplot(data=df1, aes(x=df1$month, y=df$PosTestPercent)) +
   facet_grid(. ~df1$year)+
@@ -61,11 +64,14 @@ ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
   ylab("Hospital Beds Available") +
   geom_point()
 ```
+
+
 ```{r}
 proportion = df1$total_released / df1$total_hospitalized
-ggplot(data=df1, aes(x=df$ReportDate, y=proportion)) +
+ggplot(data=df1, aes(x=df1$month, y=proportion, color=CaseDelta)) +
   facet_grid(. ~df1$year)+
-  xlab("Report Date") +
+  scale_colour_gradientn(colors=rainbow(4)) +
+  xlab("Month Reported") +
   ylab("Proportion") +
   geom_point()
 
