@@ -39,7 +39,7 @@ df1 <- df %>% dplyr::mutate(year = year(as.Date(df$ReportDate,format="%m/%d/%Y")
 
 You can also embed plots, for example:
 ```{r}
-ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color=CaseDelta)) +
+ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color= df1$CaseDelta)) +
   xlab("Month") +
   ylab("Total Cases") +
   scale_colour_gradientn(colors=rainbow(4)) +
@@ -51,10 +51,11 @@ ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color=CaseDelta)) +
 ```
 
 ```{r}
-ggplot(data=df1, aes(x=df1$date, y=df$PosTestPercent)) +
+ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) +
   geom_line()+
   xlab("Month") +
   ylab("Percentage of Positive Tests") +
+  scale_colour_gradientn(colors=rainbow(4)) +
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
