@@ -79,12 +79,13 @@ ggplot(data=df1, aes(x=df1$month, y=proportion, color=CaseDelta)) +
 
 ```
 
-This graph shows the correlation between new cases and new deaths. Only 43% of the variability in new deaths can be explained by new cases.
+This graph shows the correlation between new cases and new deaths. Only 43.55611% of the variability in new deaths can be explained by new cases.
 
 ```{r}
-df1[is.na(df1)] = 0
-ggplot(data=df1, aes(y=df1$deathsDelta, x=df1$CaseDelta)) +
-  labs(x = "New Cases", y = "New Deaths") +
+df1 %>% drop_na()
+cor(df1$deathsDelta, df1$CaseDelta)
+ggplot(data=df1, aes(x=df1$deathsDelta, y=df1$CaseDelta)) +
+  labs(y = "New Cases", x = "New Deaths") +
   geom_point() +
   geom_abline(color = "red")
 ```
