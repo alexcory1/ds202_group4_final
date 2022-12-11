@@ -67,7 +67,7 @@ ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
   geom_point()
 ```
 
-
+For this graph, they stopped reporting total released and total hospitalized data after December 5th, 2021.
 ```{r}
 proportion = df1$total_released / df1$total_hospitalized
 ggplot(data=df1, aes(x=df1$month, y=proportion, color=CaseDelta)) +
