@@ -70,6 +70,17 @@ ggplot(data=df1, aes(x=df$ReportDate, y=proportion)) +
   geom_point()
 
 ```
+```{r}
+
+df1[is.na(df1)] = 0
+
+ggplot(data=df1, aes(y=df1$deathsDelta, x=df1$CaseDelta)) +
+  ylab("New Deaths") +
+  xlab("New Cases") +
+  geom_abline()+  
+  geom_point()
+
+```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
