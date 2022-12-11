@@ -56,10 +56,9 @@ ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
 ```
 ```{r}
 proportion = df1$total_released / df1$total_hospitalized
-
-ggplot(data=df1, aes(df1$month)) +
-  geom_point(aes(y=df1$total_released, color = "green")) +
-  geom_point(aes(y=df1$TotalCases, color = "red"))
+ggplot(data=df1, aes(x=df$ReportDate, y=proportion)) +
+  facet_grid(. ~df1$year)+
+  geom_point()
 
 ```
 
