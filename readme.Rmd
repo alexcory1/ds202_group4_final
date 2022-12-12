@@ -119,5 +119,19 @@ ggp1 <- ggplot(data = df1, aes(x=df1$date)) +
 ggp1     
 
 ```
+```{r}
+agc <- df1 %>% pivot_longer(
+  col = c(case0to9,case10to19,case20to29,case30to39,case40to49,case50to59,case60to69,case70to79,case80plus),
+  names_to = "ageGroup",
+  values_to = "cases")
 
+ggplot(data = agc, aes(x = `date`, y = `cases`)) +
+  facet_wrap(~agc$ageGroup) +
+  labs(x = "Month", y = "Cases by Group") +
+  geom_line()+
+  geom_point() +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "4 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
