@@ -80,7 +80,7 @@ ggplot(data=df1, aes(x=df1$date, y=proportion_released, color=CaseDelta)) +
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
-  ggtitle("Proportion released by month")
+  ggtitle("Proportion Released from Hospital by Month")
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 ```
@@ -98,15 +98,26 @@ ggplot(data=df1, aes(x=df1$deathsDelta, y=df1$CaseDelta)) +
 ```{r}
 
 ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
-  geom_line(aes(y = df1$genMale), color = "lightblue") +
-  geom_line(aes(y = df1$genFemale), color = "pink") +
+  geom_line(aes(y = df1$genMale), color = "lightblue", size=2) +
+  geom_line(aes(y = df1$genFemale), color = "pink", size=2) +
   labs(x="Date", y="Cases") +
-  ggtitle("Cases by Gender (Female corresponds to pink, male to blue)") +
+  ggtitle("Cases by Gender Over Time (Pink to Female, Blue to Male)") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 ggp1     
 
 ```
+```{r}
 
+ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
+  geom_line(aes(y = df1$deathGenMale), color = "lightblue", size=2) +
+  geom_line(aes(y = df1$deathGenFemale), color = "pink", size=2) +
+  labs(x="Date", y="Deaths") +
+  ggtitle("Deaths by Gender Over Time (Pink to Female, Blue to Male)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+ggp1     
+
+```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
