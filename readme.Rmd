@@ -77,6 +77,7 @@ ggplot(data=df1, aes(x=df1$date, y=proportion_released, color=CaseDelta)) +
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
+  ggtitle("Proportion released by month")
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 ```
@@ -88,14 +89,16 @@ df1[is.na(df1)] = 0
 ggplot(data=df1, aes(x=df1$deathsDelta, y=df1$CaseDelta)) +
   labs(y = "New Cases", x = "New Deaths") +
   geom_point() +
+  ggtitle("New Deaths by New Cases")
   geom_abline(color = "red")
 ```
 ```{r}
 
 ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
-  geom_line(aes(y = df1$genMale), color = "blue") +
+  geom_line(aes(y = df1$genMale), color = "lightblue") +
   geom_line(aes(y = df1$genFemale), color = "pink") +
-  labs(x=Date, y= Gender) +
+  labs(x="Date", y="Cases") +
+  ggtitle("Cases by Gender") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 ggp1     
