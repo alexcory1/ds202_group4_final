@@ -171,7 +171,7 @@ ggplot(data = agd, aes(x = `date`, y = `deathByGroup`)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 ```{r}
-agd$proportion = agd$deathByGroup / agd$TotalCases
+agd$proportion = agd$deathByGroup / agd$deaths
 
 ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
   facet_wrap(~agd$ageGroup) +
@@ -179,6 +179,68 @@ ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
   geom_line()+
   geom_point() +
   ggtitle("Proportion of Deaths by Age Range") +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "4 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+```{r}
+cbr <- df1 %>% pivot_longer(
+  col = c(caseAfrAmer,caseWhite,caseHispanic,caseAsian,caseOther,caseNotAVail),
+  names_to = "race",
+  values_to = "cases")
+
+ggplot(data = cbr, aes(x = `date`, y = `cases`)) +
+  facet_wrap(~cbr$race) +
+  labs(x = "Month", y = "Cases by Race") +
+  geom_line()+
+  geom_point() +
+  ggtitle("Cases by Race") +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "4 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+```{r}
+cbr$proportion = cbr$cases / cbr$TotalCases
+
+ggplot(data = cbr, aes(x = `date`, y = `proportion`)) +
+  facet_wrap(~cbr$race) +
+  labs(x = "Month", y = "Proportion of Total Cases") +
+  geom_line()+
+  geom_point() +
+  ggtitle("Proportion of Cases by Race") +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "4 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+```{r}
+dbr <- df1 %>% pivot_longer(
+  col = c(deathAfrAmer,deathWhite,deathHispanic,deathAsian,deathOther,deathNotAvail),
+  names_to = "race",
+  values_to = "deathByRace")
+
+ggplot(data = dbr, aes(x = `date`, y = `deathByRace`)) +
+  facet_wrap(~dbr$race) +
+  labs(x = "Month", y = "Deaths by Race") +
+  geom_line()+
+  geom_point() +
+  ggtitle("Deaths by Race") +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "4 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+```{r}
+dbr$proportion = dbr$deathByRace / dbr$deaths
+
+ggplot(data = dbr, aes(x = `date`, y = `proportion`)) +
+  facet_wrap(~dbr$race) +
+  labs(x = "Month", y = "Proportion of Total Deaths") +
+  geom_line()+
+  geom_point() +
+  ggtitle("Proportion of Deaths by Race") +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
