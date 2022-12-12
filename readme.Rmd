@@ -108,6 +108,7 @@ ggp1
 
 ```
 ```{r}
+
 ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
   geom_line(aes(y = df1$deathGenMale), color = "lightblue") +
   geom_line(aes(y = df1$deathGenFemale), color = "pink") +
