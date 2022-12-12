@@ -64,15 +64,6 @@ ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) 
 ```
 
 ```{r}
-ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
-  xlab("Total Hospitalized") +
-  ylab("Hospital Beds Available") +
-  ggtitle("Hospital Beds vs Total Hospitalized") +
-  geom_point()
-```
-
-
-```{r}
 proportion_released = df1$total_released / df1$total_hospitalized
 ggplot(data=df1, aes(x=df1$date, y=proportion_released, color=CaseDelta)) +
   scale_colour_gradientn(colors=rainbow(4)) +
