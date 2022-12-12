@@ -90,6 +90,15 @@ ggplot(data=df1, aes(x=df1$deathsDelta, y=df1$CaseDelta)) +
   geom_point() +
   geom_abline(color = "red")
 ```
+```{r}
+ggplot(data=df1, aes(x=df1$date, color = df1$TestsDelta)) +
+  labs(color = "New Tests", x = "Month", y = "Percentage of Positive Tests") +
+  geom_line(y=df1$genMale) +
+  geom_line(x=df1$genFemale) +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "2 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
