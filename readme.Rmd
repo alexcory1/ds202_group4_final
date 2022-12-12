@@ -46,6 +46,7 @@ ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color= df1$CaseDelta)) +
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
+  ggtitle("Total Cases Over Time") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
@@ -57,6 +58,7 @@ ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) 
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
+  ggtitle("Percent Positive Over Time") + 
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
@@ -64,6 +66,7 @@ ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) 
 ggplot(data=df1, aes(x=df1$total_hospitalized, y=df1$bedsTotal)) +
   xlab("Total Hospitalized") +
   ylab("Hospital Beds Available") +
+  ggtitle("Hospital Beds vs Total Hospitalized") +
   geom_point()
 ```
 
@@ -98,7 +101,7 @@ ggp1 <- ggplot(data = df1, aes(x=df1$date)) +
   geom_line(aes(y = df1$genMale), color = "lightblue") +
   geom_line(aes(y = df1$genFemale), color = "pink") +
   labs(x="Date", y="Cases") +
-  ggtitle("Cases by Gender") +
+  ggtitle("Cases by Gender (Female corresponds to pink, male to blue)") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 ggp1     
