@@ -154,9 +154,10 @@ agc$proportion = agc$cases / agc$TotalCases
 
 ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
   facet_wrap(~agc$ageGroup) +
-  labs(x = "Month", y = "Proportion of Cases by Group") +
+  labs(x = "Month", y = "Proportion of Total Cases") +
   geom_line()+
   geom_point() +
+  ggtitle("Proportion of Cases by Age Range") +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
@@ -170,9 +171,23 @@ agd <- df1 %>% pivot_longer(
 
 ggplot(data = agd, aes(x = `date`, y = `deathByGroup`)) +
   facet_wrap(~agd$ageGroup) +
-  labs(x = "Month", y = "Deaths by Group") +
+  labs(x = "Month", y = "Deaths by Age Range") +
   geom_line()+
   geom_point() +
+  ggtitle("Deaths by Age Range") +
+  scale_x_date(date_labels = "%m-%y",
+               date_breaks = "4 month") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+```{r}
+agd$proportion = agd$deathByGroup / agd$TotalCases
+
+ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
+  facet_wrap(~agd$ageGroup) +
+  labs(x = "Month", y = "Proportion of Total Deaths") +
+  geom_line()+
+  geom_point() +
+  ggtitle("Proportion of Deaths by Age Range") +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
