@@ -173,7 +173,7 @@ ggplot(data = agd, aes(x = `date`, y = `deathByGroup`)) +
 ```{r}
 agd$proportion = agd$deathByGroup / agd$deaths
 
-ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
+ggplot(data = agd, aes(x = `date`, y = `proportion`)) +
   facet_wrap(~agd$ageGroup) +
   labs(x = "Month", y = "Proportion of Total Deaths") +
   geom_line()+
