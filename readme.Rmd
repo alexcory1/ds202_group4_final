@@ -119,16 +119,5 @@ ggp1 <- ggplot(data = df1, aes(x=df1$date)) +
 ggp1     
 
 ```
-```{r}
-
-ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
-  geom_line(aes(y = df1$deathGenMale), color = "lightblue") +
-  geom_line(aes(y = df1$deathGenFemale), color = "pink") +
-  labs(x="Date", y="Deaths") +
-  ggtitle("Deaths by Gender (Female corresponds to pink, male to blue)") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
-
-ggp1     
-```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
