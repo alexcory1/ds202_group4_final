@@ -9,9 +9,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
+
+
+
+
+
+
+
+
+
+
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
+We created several visualizations displaying Maryland’s COVID-19 data based on several factors including race, gender, and age. We found that older individuals tended to have more deaths and die at a much higher proportion than younger age groups. We also found that white and African American individuals died at the highest rate in the state. Another finding of ours was that despite women being more likely to contract COVID-19, more men died from it than women.
 
 ```{r}
 
@@ -50,6 +64,10 @@ ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color= df1$CaseDelta)) +
   ggtitle("Total Cases Over Time") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Total Cases Over Time
+This graph shows the increase in cases over time. The color shows the change in cases with red being a low change and purple being a higher increase.
+
+
 
 ```{r}
 ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) +
@@ -59,9 +77,17 @@ ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) 
   geom_point() +
   scale_x_date(date_labels = "%m-%y",
                date_breaks = "2 month") +
-  ggtitle("Percent Positive Over Time") + 
+  ,ggtitle("Percent Positive Over Time") + 
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+
+Percent Positive Over Time
+Shows the positivity rate over time. Color shows daily number of new tests. One notable feature of the graph is that at the beginning we can see that there are very few tests but have a high positivity rate.  We can infer that this is caused by the lack of tests making it hard for people who aren't absolutely sure they have it to get tested. Another feature of the graph is the spikes around Christmas time when people are getting together and are at higher risk of transmitting the disease. Based on this, we can predict that in the coming month or so there will be a significant increase in cases due to Christmas.
+
+
+Proportion Released From Hospital Each Month
+This graph shows the percentage of people released from the hospital each month. Our graph shows that the rate of dismissals had been decreasing up until the end of 2021, when they stopped reporting data on it.
+
 
 ```{r}
 proportion_released = df1$total_released / df1$total_hospitalized
@@ -77,7 +103,9 @@ ggplot(data=df1, aes(x=df1$date, y=proportion_released, color=CaseDelta)) +
 
 ```
 
-This graph shows the correlation between new cases and new deaths. Only 43% of the variability in new deaths can be explained by new cases.
+New Deaths by New Cases
+This graph shows the relationship between change in deaths and the change in cases. Our R^2 value was .43 meaning that 43% of the variability in the change in deaths can be accounted for by the change in cases. This low correlation makes sense because the new cases shouldn’t have an impact on the probability of someone already having the disease dying.
+
 
 ```{r}
 
@@ -153,6 +181,9 @@ ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Proportion of Cases by Age Range
+This graph shows the distribution of ages of people with confirmed COVID cases. Our graph had some interesting shapes to it. We would expect the curves to all be flat at some specific percentage. However, cases in the 0-19 range increased over time, and cases in the 40+ ages decreased over time. One thing that might have caused this is deaths in the older age groups being more prevalent than those in younger age groups.
+
 
 ```{r}
 agd <- df1 %>% pivot_longer(
@@ -170,6 +201,8 @@ ggplot(data = agd, aes(x = `date`, y = `deathByGroup`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Deaths by Age Range
+This graph shows the number of deaths in each age range. The notable information we can see in this graph is that there are very few deaths in the young age ranges, but very many deaths in the older age ranges. This could be an indication of why the proportions of old cases decreased over time.
 ```{r}
 agd$proportion = agd$deathByGroup / agd$deaths
 
@@ -183,6 +216,8 @@ ggplot(data = agd, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Proportion of Deaths by Age Range
+This graph shows the proportion of deaths based on each age range. Something notable about this graph is that there are close to no deaths in the 0-49 range, but there is a steady increase starting around 50, and an even bigger increase in the 80+ group.
 
 ```{r}
 cbr <- df1 %>% pivot_longer(
@@ -200,6 +235,8 @@ ggplot(data = cbr, aes(x = `date`, y = `cases`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Cases by Race
+This breaks down the number of cases by race. The two races with the most cases were white and African American. There were also a good number of hispanic cases, but very few Asian and other cases.
 
 ```{r}
 cbr$proportion = cbr$cases / cbr$TotalCases
@@ -214,6 +251,8 @@ ggplot(data = cbr, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Proportion of Cases by Race
+This shows the proportion of cases by race. White and African American cases tended to make up about 30-40% of all cases in the state each, and Asian cases never made up more than 10% of cases.
 
 ```{r}
 dbr <- df1 %>% pivot_longer(
@@ -231,6 +270,9 @@ ggplot(data = dbr, aes(x = `date`, y = `deathByRace`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Deaths by Race
+This set of graphs shows the number of deaths in each racial group. White people had the most deaths, surpassing 7500. This was followed by African Americans sitting around 5000, then Hispanic and Asian individuals with around 1000 each.
+
 
 ```{r}
 dbr$proportion = dbr$deathByRace / dbr$deaths
@@ -245,5 +287,7 @@ ggplot(data = dbr, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
+Proportion of Deaths by Race
+This shows what proportion of deaths each racial group makes up. White individuals made up around 50% of all deaths, followed closely by African Americans, who made up nearly 40%.
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
