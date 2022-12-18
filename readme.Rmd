@@ -10,148 +10,70 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 
+# Visualizing COVID-19 {.unnumbered}
+
+Authors: Alex Cory, Dakota Rossi, Daniel Solomon
+
+## Abstract {.unnumbered}
+
+We want to create visualizations of COVID-19 to find correlations and patterns. We created several visualizations displaying Maryland’s COVID-19 data based on several factors including race, gender, and age. We found that older individuals tended to have more deaths and die at a much higher proportion than younger age groups. We noticed that there were very few deaths total under the age of about 40. We also found that white and African American individuals died at the highest rate in the state. Another finding of ours was that despite women being more likely to contract COVID-19, more men died from COVID than women.
 
 
+# Introduction
 
+By creating visualizations and exploring COVID data, we can grow our knowledge about viruses and help to figure out what demographics are most at-risk for illnesses like COVID-19. We also want to try to find patterns in the spread of COVID to see if certain events are likely to cause spikes in cases. Finally, we want to investigate COVID-19 deaths and see if those who catch COVID the most are also the ones dying the most from COVID, or if there are other factors in COVID death rates. In the `[Age]` section of the report, we investigate COVID cases and deaths, including how age impacts likelihood of catching or dying from COVID. In the `[Race]` section, we look at how race impacts COVID case and death rates. Finally, in the `[Gender]` section, we will investigate the differences in male and female COVID-19 statistics. Finally, we will conclude with some overall takeaways and limitations we found while analyzing our dataset. 
 
-
-
-
-
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-
-
-We created several visualizations displaying Maryland’s COVID-19 data based on several factors including race, gender, and age. We found that older individuals tended to have more deaths and die at a much higher proportion than younger age groups. We also found that white and African American individuals died at the highest rate in the state. Another finding of ours was that despite women being more likely to contract COVID-19, more men died from it than women.
-
-```{r}
-
-library(data.table)
-df <- fread('MD_COVID-19_-_MASTER_Case_Tracker.csv')
-show(df)
-```
-
-## Including Plots
 ```{r}
 library(zoo)
 library(tidyverse)
 library(lubridate)
 library(dplyr)
+library(data.table)
 ```
 
-```{r}
 
-
+```{r data-clean-script}
+df <- fread('MD_COVID-19_-_MASTER_Case_Tracker.csv')
 df1 <- df %>% dplyr::mutate(year = year(as.Date(df$ReportDate,format="%m/%d/%Y")),
                  month = lubridate::month(as.Date(df$ReportDate,format="%m/%d/%Y")),
                  day = lubridate::day(as.Date(df$ReportDate,format="%m/%d/%Y")),
                  date = my(format(as.Date(df$ReportDate,format = "%m/%d/%Y"),"%m/%y")))
 ```
 
+# Quick Data Summary
 
-You can also embed plots, for example:
+In this report, we will be looking at COVID cases and deaths, while relating them age, race, and gender demographics. Below are summaries of the COVID case and death delta data, as well as descriptions of the demographic categories we chose.
+
 ```{r}
-ggplot(data=df1, aes(x=df1$date, y=df1$TotalCases, color= df1$CaseDelta)) +
-  labs(x = "Month", y = "Total Cases", color = "New Cases") +
-  scale_colour_gradientn(colors=rainbow(4)) +
-  geom_line()+
-  geom_point() +
-  scale_x_date(date_labels = "%m-%y",
-               date_breaks = "2 month") +
-  ggtitle("Total Cases Over Time") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+summary(df1$CaseDelta)
+summary(df1$deathsDelta)
 ```
-Total Cases Over Time
-This graph shows the increase in cases over time. The color shows the change in cases with red being a low change and purple being a higher increase.
-
-
+Since 2020, Maryland has seen an average of 1283 new COVID cases and 15.42 new COVID deaths per day. The daily death data features some NA values which will be discussed more later.
 
 ```{r}
-ggplot(data=df1, aes(x=df1$date, y=df1$PosTestPercent, color = df1$TestsDelta)) +
-  geom_line() +
-  labs(color = "New Tests", x = "Month", y = "Percentage of Positive Tests") +
-  scale_colour_gradientn(colors=rainbow(4)) +
-  geom_point() +
-  scale_x_date(date_labels = "%m-%y",
-               date_breaks = "2 month") +
-  ,ggtitle("Percent Positive Over Time") + 
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+colnames(df1[,47:55])
 ```
-
-Percent Positive Over Time
-Shows the positivity rate over time. Color shows daily number of new tests. One notable feature of the graph is that at the beginning we can see that there are very few tests but have a high positivity rate.  We can infer that this is caused by the lack of tests making it hard for people who aren't absolutely sure they have it to get tested. Another feature of the graph is the spikes around Christmas time when people are getting together and are at higher risk of transmitting the disease. Based on this, we can predict that in the coming month or so there will be a significant increase in cases due to Christmas.
-
-
-Proportion Released From Hospital Each Month
-This graph shows the percentage of people released from the hospital each month. Our graph shows that the rate of dismissals had been decreasing up until the end of 2021, when they stopped reporting data on it.
-
+These are the ranges of the age demographics. There are also variables with death information following a similar naming format. The number represent the ages of people within each of these ranges.
 
 ```{r}
-proportion_released = df1$total_released / df1$total_hospitalized
-ggplot(data=df1, aes(x=df1$date, y=proportion_released, color=CaseDelta)) +
-  scale_colour_gradientn(colors=rainbow(4)) +
-  xlab("Month Reported") +
-  ylab("Proportion Released") +
-  geom_point() +
-  scale_x_date(date_labels = "%m-%y",
-               date_breaks = "2 month") +
-  ggtitle("Proportion Released from Hospital by Month")
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
-
+colnames(df1[,60:65])
 ```
-
-New Deaths by New Cases
-This graph shows the relationship between change in deaths and the change in cases. Our R^2 value was .43 meaning that 43% of the variability in the change in deaths can be accounted for by the change in cases. This low correlation makes sense because the new cases shouldn’t have an impact on the probability of someone already having the disease dying.
-
+These are the race demographics specified by our dataset. The variables represent the number of cases from African American, White, Hispanic, and Asian individuals, with separate categories for "Other" and "Not Available" data. There are similar variables with similar names for death data within these demographics.
 
 ```{r}
-
-df1$NegDelta[is.na(df1$NegDelta)] = 0
-df1$bedsDelta[is.na(df1$bedsDelta)] = 0
-df1$deathsDelta[is.na(df1$deathsDelta)] = 0
-df1$CaseDelta[is.na(df1$CaseDelta)] = 0
-df1$pDeathsDelta[is.na(df1$pDeathsDelta)] = 0
-df1$TestsDelta[is.na(df1$TestsDelta)] = 0
-df1$releasedDelta[is.na(df1$releasedDelta)] = 0
-df1$hospitalizedDelta[is.na(df1$hospitalizedDelta)] = 0
-
-df1 <- df1 %>% mutate_all(.funs = funs(na.locf0(.)))
-
-ggplot(data=df1, aes(x=df1$deathsDelta, y=df1$CaseDelta)) +
-  labs(y = "New Cases", x = "New Deaths") +
-  geom_point() +
-  ggtitle("New Deaths by New Cases")
-  geom_abline(color = "red")
+colnames(df1[,57:58])
 ```
-```{r}
+These are the gender demographics that we used, with these variables referring to the amount of COVID cases from each gender. There is also a 'genUnkn' variable we did not use in our analysis. Once again, similar variables exist for death data as well.
 
-ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
-  geom_line(aes(y = df1$genMale), color = "lightblue", size=2) +
-  geom_line(aes(y = df1$genFemale), color = "pink", size=2) +
-  labs(x="Date", y="Cases") +
-  ggtitle("Cases by Gender Over Time (Pink to Female, Blue to Male)") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+# Results
 
-ggp1     
+## Age
 
-```
-```{r}
+Here, we will investigate how the age variable relates to COVID cases and deaths overtime. We can see in our [total-cases-by-age](#fig:total-cases-by-age) figures how COVID cases have been increasing overtime across all age groups. In the [prop-cases-by-age](fig:prop-cases-by-age) figures, we see an increase in the proportion of cases in young people, and a subsequent decrease in the proportion of COVID-19 cases among older demographics. In the figure  [total-deaths-by-age](#fig:total-deaths-by-age), we see how older individuals die from COVID at higher rates despite having fewer overall cases. Finally, our [prop-deaths-by-age](f#fig:prop-deaths-by-age) figure displays how much faster older demographics are passing away from COVID-19 when compared to younger individuals. 
 
-ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
-  geom_line(aes(y = df1$deathGenMale), color = "lightblue", size=2) +
-  geom_line(aes(y = df1$deathGenFemale), color = "pink", size=2) +
-  labs(x="Date", y="Deaths") +
-  ggtitle("Deaths by Gender Over Time (Pink to Female, Blue to Male)") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
 
-ggp1     
+```{r total-cases-by-age, echo=FALSE, fig.cap="These figures show the total amount of COVID cases by age group, each of which showing a positive correlation. The demographics of people aged 20to29 and 30to39 feature the largest amount of COVID cases. There are more rapid increases towards late 2021 compared to other stretches of time.", message = FALSE}
 
-```
-
-```{r}
 agc <- df1 %>% pivot_longer(
   col = c(case0to9,case10to19,case20to29,case30to39,case40to49,case50to59,case60to69,case70to79,case80plus),
   names_to = "ageGroup",
@@ -168,7 +90,8 @@ ggplot(data = agc, aes(x = `date`, y = `cases`)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
-```{r}
+```{r prop-cases-by-age, echo=FALSE, fig.cap="These figures show the proportion of COVID cases each age-range holds at a given time. The proportion of cases from younger people has increased over time, with all age ranges above 40 showing a decrease in proportion of COVID-cases since mid-2020. Cases among people aged 50to59 and 60to69 seem to have shown the greatest decrease in proportion of cases.", message = FALSE}
+
 agc$proportion = agc$cases / agc$TotalCases
 
 ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
@@ -181,11 +104,9 @@ ggplot(data = agc, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Proportion of Cases by Age Range
-This graph shows the distribution of ages of people with confirmed COVID cases. Our graph had some interesting shapes to it. We would expect the curves to all be flat at some specific percentage. However, cases in the 0-19 range increased over time, and cases in the 40+ ages decreased over time. One thing that might have caused this is deaths in the older age groups being more prevalent than those in younger age groups.
 
+```{r total-deaths-by-age, echo=FALSE, fig.cap="These figures show the total amount of COVID deaths by age-range, each of which increasing overtime. Older age ranges tend to make up far more COVID deaths than younger age ranges. There are outliers in the scatterplot for all age ranges towards the end of 2021, these are reflective of an issue present in the dataset and can be ignored.", message = FALSE}
 
-```{r}
 agd <- df1 %>% pivot_longer(
   col = c(death0to9,death10to19,death20to29,death30to39,death40to49,death50to59,death60to69,death70to79,death80plus),
   names_to = "ageGroup",
@@ -201,9 +122,9 @@ ggplot(data = agd, aes(x = `date`, y = `deathByGroup`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Deaths by Age Range
-This graph shows the number of deaths in each age range. The notable information we can see in this graph is that there are very few deaths in the young age ranges, but very many deaths in the older age ranges. This could be an indication of why the proportions of old cases decreased over time.
-```{r}
+
+```{r prop-deaths-by-age, echo=FALSE, fig.cap="These figures show the proportion of COVID-19 deaths by age range, with all figures staying relatively static overtime. There are very few deaths in people aged 0 to 49, with people in the 80plus category holding the plurality of deaths. Less than 5% of deaths are shared by each age range prior to the 50to59 category.", message = FALSE}
+
 agd$proportion = agd$deathByGroup / agd$deaths
 
 ggplot(data = agd, aes(x = `date`, y = `proportion`)) +
@@ -216,10 +137,13 @@ ggplot(data = agd, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Proportion of Deaths by Age Range
-This graph shows the proportion of deaths based on each age range. Something notable about this graph is that there are close to no deaths in the 0-49 range, but there is a steady increase starting around 50, and an even bigger increase in the 80+ group.
 
-```{r}
+## Race
+
+In this section, we will investigate how the race of individuals in Maryland correlates with COVID data. We can see in our [total-cases-by-race](#fig:total-cases-by-race) figures how COVID cases have been increasing overtime across all race demographics. In the [prop-cases-by-race](fig:prop-cases-by-race) figure, we see a significant increase in the proportion of COVID cases among white Marylanders overtime. In [total-deaths-by-race](#fig:total-deaths-by-race), we see the amount of COVID deaths overtime, which follow a similar trend to the case figures. Finally, our [prop-deaths-by-age](f#fig:prop-deaths-by-age) figure displays the proportion of total COVID deaths each demographic has shared, again showing an increase overtime for white Marylanders.
+
+
+```{r total-cases-by-race, echo=FALSE, fig.cap="These figures show the amount of COVID cases across each race demographic, featuring large totals among African American and White individuals. Asian, Hispanic, and the other categories are dwarfed by the rapid increase in cases from African American and white Marylanders. There are sharp increases towards the end of 2021.", message = FALSE}
 cbr <- df1 %>% pivot_longer(
   col = c(caseAfrAmer,caseWhite,caseHispanic,caseAsian,caseOther,caseNotAVail),
   names_to = "race",
@@ -235,10 +159,8 @@ ggplot(data = cbr, aes(x = `date`, y = `cases`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Cases by Race
-This breaks down the number of cases by race. The two races with the most cases were white and African American. There were also a good number of hispanic cases, but very few Asian and other cases.
 
-```{r}
+```{r prop-cases-by-race, echo=FALSE, fig.cap="These figures show the proportion each race demographic holds of total COVID cases, showing White and African American individuals holding the vast majority of cases. Hispanic individuals have seen a large decrease in proportion of COVID cases since 2020, while white individuals have seen a large increase in proportion of cases. Cases with unavaliable race data has also decresed overtime, indicating better race identification metrics.", message = FALSE}
 cbr$proportion = cbr$cases / cbr$TotalCases
 
 ggplot(data = cbr, aes(x = `date`, y = `proportion`)) +
@@ -251,10 +173,8 @@ ggplot(data = cbr, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Proportion of Cases by Race
-This shows the proportion of cases by race. White and African American cases tended to make up about 30-40% of all cases in the state each, and Asian cases never made up more than 10% of cases.
 
-```{r}
+```{r total-deaths-by-race, echo=FALSE, fig.cap="These figures display the total amount of COVID-19 deaths observed between the various age demographics. The plots show an increase in COVID deaths overtime for all demographics other than 'NotAvail'. There are blips in the charts towards the end of 2021, these are indicative of an issue within our dataset and can be ignored.", message = FALSE}
 dbr <- df1 %>% pivot_longer(
   col = c(deathAfrAmer,deathWhite,deathHispanic,deathAsian,deathOther,deathNotAvail),
   names_to = "race",
@@ -270,11 +190,8 @@ ggplot(data = dbr, aes(x = `date`, y = `deathByRace`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Deaths by Race
-This set of graphs shows the number of deaths in each racial group. White people had the most deaths, surpassing 7500. This was followed by African Americans sitting around 5000, then Hispanic and Asian individuals with around 1000 each.
 
-
-```{r}
+```{r prop-deaths-by-race, echo=FALSE, fig.cap="These figures display the proportion of total COVID deaths shared among each race demographic, with African American and White Marylanders holding the majority of deaths. Proportionally, white COVID deaths have increased overtime, while all other demographics have subsiquently decreased overtime.", message = FALSE}
 dbr$proportion = dbr$deathByRace / dbr$deaths
 
 ggplot(data = dbr, aes(x = `date`, y = `proportion`)) +
@@ -287,7 +204,51 @@ ggplot(data = dbr, aes(x = `date`, y = `proportion`)) +
                date_breaks = "4 month") +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-Proportion of Deaths by Race
-This shows what proportion of deaths each racial group makes up. White individuals made up around 50% of all deaths, followed closely by African Americans, who made up nearly 40%.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Gender
+
+In this section, we will observe how gender and COVID data are correlated. First, in the [total-cases-by-gender](#fig:total-cases-by-gender) section, we see how women lead men in the total amount of COVID cases reported. We also see in the [total-deaths-by-gender](#fig:total-deaths-by-gender) how men have died more than women from COVID. This is very interesting, as our initial expectation was for the gender with the most COVID cases to also have the most COVID deaths.
+
+```{r total-cases-by-gender, echo=FALSE, fig.cap="This chart displays the difference in male and female COVID cases, showing how women tend to get COVID at a higher rate than men. Women have consistently outpaced men in terms of total COVID case count. There are sharp spikes around the 2021 holiday season.", message = FALSE}
+
+ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
+  geom_line(aes(y = df1$genMale), color = "lightblue", size=2) +
+  geom_line(aes(y = df1$genFemale), color = "pink", size=2) +
+  labs(x="Date", y="Cases") +
+  ggtitle("Cases by Gender Over Time (Pink to Female, Blue to Male)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+ggp1     
+
+```
+
+```{r total-deaths-by-gender, echo=FALSE, fig.cap="This chart shows the differnece in male and female COVID deaths overtime, displaying how men have died from COVID at a higher rate than women. This is interesting, as despite having COVID less frequently than women, men have outpaced women in terms of total COVID death count. There is a blip towards the end of 2021, this is indicative of a flaw in our dataset and can be ignored.", message = FALSE}
+
+ggp1 <- ggplot(data = df1, aes(x=df1$date)) +       
+  geom_line(aes(y = df1$deathGenMale), color = "lightblue", size=2) +
+  geom_line(aes(y = df1$deathGenFemale), color = "pink", size=2) +
+  labs(x="Date", y="Deaths") +
+  ggtitle("Deaths by Gender Over Time (Pink to Female, Blue to Male)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+ggp1     
+
+```
+
+...
+
+# Conclusions
+
+From our data, we can see how COVID impacts different demographics in different ways. First, in the `[Age]` section, we saw how COVID cases are spread widely between age ranges, yet the majority of deaths come from older demographics. We also saw an increase in the proportion of total cases for the younger demographics in our dataset. Next, we took a look at race data in the `[Race]` section, and we found that white and African American individuals both catch COVID more often and die from COVID more often than other race demographics. We additionally saw an increase in the proportion of white COVID cases over time, as well as a decrease for other demographics. Finally, in the `[Gender]` section, we took a look at how men and women face different challenges regarding COVID-19. Women catch COVID more often while more men have died from the virus. This data can help us recognize which demographics would need the most help and support in the future. Within all of these demographics, we also saw some sharp increases in both age and death data around late 2021.
+
+Although we found our conclusions helpful, we had some more ideas on how we could improve our findings had we redone this project. First, we would have liked to compare our case data with general Maryland demographic data. With our current data, we can see the total amount of cases and deaths among demographics, but with more demographic data, we could figure out what percentage of the population has been impacted by COVID. We could also more accurately find differences in COVID data between demographics. We also could have compared our Maryland data to nationwide or worldwide data. More data like this could be helpful to make sure that the state or data we chose is not an outlier when compared to other regions. Finally, we would have liked to look at county data and voting data to see if COVID was more prevalent among certain political groups. We could have separated the data by county, and figured out which counties voted Republican and which voted Democrat in the latest midterms, charting the Republican and Democrat counties separately to find patterns. Investigations like these could have helped to provide even more findings and teach us more information about virus data.
+
+## Data source {.unnumbered}
+
+Our data was sourced from the state of Maryland. The cleaning of our data was relatively easy, with most of the commands being shown in the `[Introduction]` section.
+
+## References {.unnumbered}
+
+Dataset is from the State of Maryland and their Data Administrators
+https://catalog.data.gov/dataset/md-covid-19-master-case-tracker
+
